@@ -9,21 +9,20 @@ const fetchRecipes = (req, res, response) => {
         let title, thumb, duration, servings, difficulty, key, url, href;
         let recipe_list = [];
 
-        // element.find('.category-posts');
+        element.find('.card');
         element.find('.card').each((i, e) => {
             title = $(e).find('h3 a').attr('data-tracking-value');
             thumb = $(e).find('picture').find('img').attr('data-src');
-            duration = $(e).find('._recipe-features a').text().trim().split('\n')[0].trim();
-            difficulty = $(e).find('._recipe-features a[data-tracking]').last().text().replace('\n', '').trim();
-            kkal = $(e).find('._recipe-features a.icon_fire').text().trim("");
+            duration = $(e).find('._recipe-features span').text()
+            difficulty = $(e).find('._recipe-features a.icon_difficulty').text().trim()
             url = $(e).find('h3 a').attr('href');
             href = url.split('/');
             key = href[4];
 
             recipe_list.push({
+                key: key,
                 title: title,
                 thumb: thumb,
-                key: key,
                 times: duration,
                 serving: servings,
                 difficulty: difficulty
