@@ -23,7 +23,7 @@ Food recipes API bahasa Indonesia 🇮🇩 build with __Cheerio__ and __Express 
 
 ### Endpoint Usage
 ---
-**Base Url** : `https://masak-apa.tomorisakura.vercel.app`
+**Base Url** : `https://resep-masakhariini.vercel.app`
 
 | Endpoint | Usage | Example |
 |----------|-------|---------|
@@ -43,6 +43,7 @@ Food recipes API bahasa Indonesia 🇮🇩 build with __Cheerio__ and __Express 
 ---
 
 * __Masak Apa__ [(Android Kotlin 🧙‍♂️)](https://github.com/tomorisakura/masak-apa)
+* __Lets Cooking__ [(Vue JS 🍭)](https://letscooking.vercel.app/)
 
 #### Credits
 Copyright © 2020 Reski Arianto
