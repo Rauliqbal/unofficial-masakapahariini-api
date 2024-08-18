@@ -4,18 +4,19 @@ const cheerio = require('cheerio');
 
 const fetchRecipes = (req, res, response) => {
     try {
-        const $ = cheerio.load(response.data);
-        const element = $('#category-content');
+        const $ = cheerio.load(response.data);  
+        const element = $('._recipes-list ._recipe-card');
         let title, thumb, duration, servings, difficulty, key, url, href;
         let recipe_list = [];
-        element.find('.category-posts');
-        element.find('.post-col').each((i, e) => {
-            title = $(e).find('.block-link').attr('data-tracking-value');
-            thumb = $(e).find('.thumb-wrapper').find('img').attr('data-lazy-src');
-            duration = $(e).find('.time').find('small').text();
-            servings = $(e).find('.servings').find('small').text();
-            difficulty = $(e).find('.difficulty').find('small').text();
-            url = $(e).find('a').attr('href');
+
+        // element.find('.category-posts');
+        element.find('.card').each((i, e) => {
+            title = $(e).find('h3 a').attr('data-tracking-value');
+            thumb = $(e).find('picture').find('img').attr('data-src');
+            duration = $(e).find('._recipe-features a').text().trim().split('\n')[0].trim();
+            difficulty = $(e).find('._recipe-features a[data-tracking]').last().text().replace('\n', '').trim();
+            kkal = $(e).find('._recipe-features a.icon_fire').text().trim("");
+            url = $(e).find('h3 a').attr('href');
             href = url.split('/');
             key = href[4];
 
@@ -92,7 +93,7 @@ const limiterRecipes = (req, res, response, limiter) => {
 const Controller = {
     newRecipes: async (req, res) => {
         try {
-            const response = await services.fetchService(`${baseUrl}/resep-masakan/`, res);
+            const response = await services.fetchService(`${baseUrl}/resep/`, res);
             return fetchRecipes(req, res, response);
         } catch (error) {
             throw error;
@@ -102,7 +103,7 @@ const Controller = {
     newRecipesByPage: async (req, res) => {
         try {
             const page = req.params.page;
-            const response = await services.fetchService(`${baseUrl}/resep-masakan/?halaman=${page}`, res);
+            const response = await services.fetchService(`${baseUrl}/resep/?halaman=${page}`, res);
             return fetchRecipes(req, res, response);
         } catch (error) {
             throw error;
