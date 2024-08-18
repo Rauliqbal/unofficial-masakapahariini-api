@@ -6,7 +6,7 @@ const fetchRecipes = (req, res, response) => {
     try {
         const $ = cheerio.load(response.data);  
         const element = $('._recipes-list ._recipe-card');
-        let title, thumb, duration, servings, difficulty, key, url, href;
+        let title, thumb, duration, difficulty, key, url, href;
         let recipe_list = [];
 
         element.find('.card');
@@ -24,7 +24,6 @@ const fetchRecipes = (req, res, response) => {
                 title: title,
                 thumb: thumb,
                 times: duration,
-                serving: servings,
                 difficulty: difficulty
             });
         });
@@ -90,6 +89,8 @@ const limiterRecipes = (req, res, response, limiter) => {
 }
 
 const Controller = {
+
+    // Get New Recipes
     newRecipes: async (req, res) => {
         try {
             const response = await services.fetchService(`${baseUrl}/resep/`, res);
@@ -101,8 +102,8 @@ const Controller = {
 
     newRecipesByPage: async (req, res) => {
         try {
-            const page = req.params.page;
-            const response = await services.fetchService(`${baseUrl}/resep/?halaman=${page}`, res);
+            const {page} = req.params;
+            const response = await services.fetchService(`${baseUrl}/resep/page/${page}`, res);
             return fetchRecipes(req, res, response);
         } catch (error) {
             throw error;

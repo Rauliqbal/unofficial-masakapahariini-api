@@ -34,7 +34,7 @@ route.get('/api', (req, res) => {
     });
 });
 
-// Route Error
+// Route Not Found
 route.get('*', (req, res) => {
     res.status(404).json({
         method : req.method,
