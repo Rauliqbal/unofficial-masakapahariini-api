@@ -38,6 +38,37 @@ const fetchRecipes = (req, res, response) => {
     }
 }
 
+const fetchCategory = (req, res, response) => {
+    try {
+        const $ = cheerio.load(response.data);
+        const element = $('._categories-list');
+        let category, url, key, thumb; 
+        let category_list = [];
+
+        element.find('ul li').each((i, e) => {
+            category = $(e).find('p a[data-tracking]').text().trim()
+            url = $(e).find('a').attr('href');
+            thumb= $(e).find('picture').find('img').attr('data-src');
+            key = $(e).find('a').attr('href').split('/');
+            key = key[key.length - 2];
+            category_list.push({
+                key: key,
+                category: category,
+                thumb: thumb,
+                url: url,
+            });
+        })
+
+        res.send({
+            method: req.method,
+            status: true,
+            results: category_list
+        });
+    } catch (error) {
+        throw error;
+    }
+}
+
 const limiterRecipes = (req, res, response, limiter) => {
     try {
         const $ = cheerio.load(response.data);
@@ -112,34 +143,8 @@ const Controller = {
 
     category: async (req, res) => {
         try {
-            const response = await services.fetchService(`${baseUrl}/resep-masakan/`, res);
-            const $ = cheerio.load(response.data);
-            const element = $('#sidebar');
-            let category, url, key;
-            let category_list = [];
-            element.find('.explore-by-widget');
-            element.find('.category-col').each((i, e) => {
-                // image = $(e).find('.bg-medium').
-
-                category = $(e).find('a').attr('data-tracking-value');
-                url = $(e).find('a').attr('href');
-                const split = category.split(' ');
-                if (split.includes('Menu')) split.splice(0, 1);
-                const results = Array.from(split).join('-');
-                key = $(e).find('a').attr('href').split('/');
-                key = key[key.length - 2];
-                category_list.push({
-                    category: category,
-                    url: url,
-                    key: key
-                });
-            });
-
-            return res.send({
-                method: req.method,
-                status: true,
-                results: category_list
-            });
+           const response = await services.fetchService(`${baseUrl}/`,res)
+           return fetchCategory(req,res,response)
 
         } catch (error) {
             throw error;
